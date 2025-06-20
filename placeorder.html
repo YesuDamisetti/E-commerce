@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Place Order - MyShop</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
+
+    header {
+      background-color: #232f3e;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .order-summary, .order-form {
+      margin-bottom: 30px;
+    }
+
+    .order-summary div {
+      margin-bottom: 10px;
+    }
+
+    .order-summary div span {
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #ff9900;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #e68a00;
+    }
+
+    .success-message {
+      background: #d4edda;
+      padding: 15px;
+      border-radius: 5px;
+      color: #155724;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MyShop</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Signup</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Place Your Order</h2>
+
+    <div class="order-summary" id="order-summary"></div>
+
+    <form class="order-form" id="order-form">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" required>
+
+      <label for="address">Address</label>
+      <textarea id="address" rows="3" required></textarea>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <button type="submit">Place Order</button>
+    </form>
+
+    <div class="success-message" id="success-message" style="display:none;">
+      🎉 Your order has been placed successfully!
+    </div>
+  </main>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const summaryDiv = document.getElementById("order-summary");
+    const form = document.getElementById("order-form");
+    const successMessage = document.getElementById("success-message");
+
+    if (cart.length === 0) {
+      summaryDiv.innerHTML = "<p>Your cart is empty.</p>";
+      form.style.display = "none";
+    } else {
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        const itemDiv = document.createElement("div");
+        itemDiv.innerHTML = `
+          <span>${item.name}</span> x${item.quantity} - ₹${itemTotal}
+        `;
+        summaryDiv.appendChild(itemDiv);
+      });
+      const totalDiv = document.createElement("div");
+      totalDiv.innerHTML = `<span>Total:</span> ₹${total.toLocaleString("en-IN")}`;
+      summaryDiv.appendChild(totalDiv);
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Simulate order placement
+      localStorage.removeItem("cart");
+      form.style.display = "none";
+      summaryDiv.innerHTML = "";
+      successMessage.style.display = "block";
+    });
+  </script>
+</body>
+</html>
